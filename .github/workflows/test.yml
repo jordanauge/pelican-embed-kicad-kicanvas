@@ -1,0 +1,90 @@
+name: Run Tests
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, macos-latest, windows-latest]
+                python-version: ["3.8", "3.9", "3.10", "3.11"]
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v4
+              with:
+                  enable-cache: true
+                  cache-dependency-glob: "pyproject.toml"
+
+            - name: Set up Python ${{ matrix.python-version }}
+              run: uv python install ${{ matrix.python-version }}
+
+            - name: Create virtual environment
+              run: uv venv --python ${{ matrix.python-version }}
+
+            - name: Install dependencies
+              run: |
+                  uv pip install -e .[liquid,dev]
+
+            - name: Run tests with pytest
+              run: |
+                  uv run pytest tests/ -v --cov=pelican_kicad_embed --cov-report=xml --cov-report=term
+
+            - name: Upload coverage to Codecov
+              if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+              uses: codecov/codecov-action@v3
+              with:
+                  file: ./coverage.xml
+                  flags: unittests
+                  name: codecov-umbrella
+
+    lint:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v4
+
+            - name: Set up Python
+              run: uv python install 3.11
+
+            - name: Create virtual environment
+              run: uv venv
+
+            - name: Install dev dependencies
+              run: |
+                  uv pip install ruff pyright
+
+            - name: Lint with ruff
+              run: |
+                  uv run ruff check pelican_kicad_embed tests
+
+            - name: Check formatting with ruff
+              run: |
+                  uv run ruff format --check pelican_kicad_embed tests
+
+    verify-dependencies:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+
+            - name: Check KiCanvas version
+              run: |
+                  python scripts/check_kicanvas_version.py

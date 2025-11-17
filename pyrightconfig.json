@@ -1,0 +1,23 @@
+{
+  "include": [
+    "pelican_kicad_embed",
+    "tests"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/node_modules",
+    "**/.venv",
+    "**/venv",
+    "build",
+    "dist"
+  ],
+  "reportMissingTypeStubs": false,
+  "reportUnknownParameterType": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownVariableType": false,
+  "reportGeneralTypeIssues": false,
+  "pythonVersion": "3.7",
+  "typeCheckingMode": "basic"
+}

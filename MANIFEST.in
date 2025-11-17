@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+include CONTRIBUTING.md
+include pelicanconf.py.example
+recursive-include pelican_kicad_embed *.py

@@ -1,0 +1,57 @@
+"""Example Pelican configuration for testing pelican-embed-kicad-kicanvas plugin.
+
+This file demonstrates how to configure Pelican to use the plugin.
+"""
+
+# Basic Site Settings
+AUTHOR = 'Your Name'
+SITENAME = 'My Electronics Blog'
+SITEURL = ''
+
+# Path settings
+PATH = 'content'
+STATIC_PATHS = [
+    'images',
+    'static/schematics',  # Required for KiCad schematic files
+]
+
+# Plugin settings
+PLUGINS = [
+    'pelican_kicad_embed',  # Enable the KiCad embedding plugin
+    # Add 'liquid_tags' here if you want Liquid Tag syntax support
+]
+
+# Markdown settings (optional - plugin auto-registers)
+MARKDOWN = {
+    'extension_configs': {
+        'markdown.extensions.codehilite': {'css_class': 'highlight'},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+    },
+    'output_format': 'html5',
+}
+
+# Theme and output settings
+THEME = 'simple'
+OUTPUT_PATH = 'output/'
+DELETE_OUTPUT_DIRECTORY = True
+
+# URL settings
+ARTICLE_URL = '{slug}.html'
+ARTICLE_SAVE_AS = '{slug}.html'
+PAGE_URL = '{slug}.html'
+PAGE_SAVE_AS = '{slug}.html'
+
+# Feed settings
+FEED_ALL_ATOM = None
+CATEGORY_FEED_ATOM = None
+TRANSLATION_FEED_ATOM = None
+AUTHOR_FEED_ATOM = None
+AUTHOR_FEED_RSS = None
+
+# Pagination
+DEFAULT_PAGINATION = 10
+
+# Timezone and language
+TIMEZONE = 'UTC'
+DEFAULT_LANG = 'en'

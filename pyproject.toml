@@ -1,0 +1,110 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pelican-embed-kicad-kicanvas"
+dynamic = ["version"]
+description = "Pelican plugin for embedding interactive KiCad schematics using KiCanvas"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Jordan Auge", email = "jordan.auge@example.com"}
+]
+keywords = ["pelican", "plugin", "kicad", "kicanvas", "schematic", "electronics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Documentation",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Pelican :: Plugins",
+]
+dependencies = [
+    "pelican>=4.5",
+    "markdown>=3.2",
+    "docutils>=0.16",
+]
+
+[project.optional-dependencies]
+liquid = [
+    "pelican-liquid-tags>=1.0.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jordanauge/pelican-embed-kicad-kicanvas"
+Repository = "https://github.com/jordanauge/pelican-embed-kicad-kicanvas"
+Issues = "https://github.com/jordanauge/pelican-embed-kicad-kicanvas/issues"
+
+[project.entry-points."pelican.plugins"]
+pelican_kicad_embed = "pelican_kicad_embed"
+
+[tool.setuptools]
+packages = ["pelican_kicad_embed"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pelican_kicad_embed.__about__.__version__"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["pelican_kicad_embed"]
+omit = ["tests/*", "**/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py37"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # Allow assert in tests
+"pelican_kicad_embed/__init__.py" = [
+    "F401",  # unused imports in TYPE_CHECKING block (for type hints only)
+    "SIM105",  # try-except-pass is clearer than contextlib.suppress for optional imports
+]
+"pelican_kicad_embed/md_ext.py" = [
+    "N802",  # extendMarkdown and makeExtension are required by Markdown API
+]
